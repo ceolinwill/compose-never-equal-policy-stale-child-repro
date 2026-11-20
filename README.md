@@ -1,5 +1,7 @@
 # `neverEqualPolicy()` + same list instance: a child composable keeps showing the old list
 
+Reported in https://github.com/android/skills/issues/281.
+
 The Jetpack Compose performance skill in [android/skills](https://github.com/android/skills) (`jetpack-compose/jetpack-compose-performance/references/state-and-stability.md`, section "3.A Optimize whole-collection updates with `neverEqualPolicy()`", and the "Collection State Tracking" bullet in its `SKILL.md`) recommends keeping one `MutableList`, mutating it, and reassigning the same instance to `mutableStateOf(list, neverEqualPolicy())`. That invalidates every scope that reads the state. But with strong skipping (on by default), a restartable child that receives the list as a parameter compares it by instance (`===`). The instance never changes, so the child skips and keeps showing the old contents, while the parent that read the state shows the new size.
 
 ## Reproduction
